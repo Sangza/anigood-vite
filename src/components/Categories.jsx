@@ -1,6 +1,8 @@
-import { CATEGORIES } from "../data/products.js";
+import { useCategories } from "../data/useCategories.js";
 
-export default function Categories({ filter, onPick }) {
+export default function Categories({ products = [], filter, onPick }) {
+  const { categories } = useCategories(products);
+  const CATEGORIES = ["All products", ...categories];
   const isActive = (c) =>
     c === "All products" ? filter.type === "all" : filter.type === "category" && filter.value === c;
 

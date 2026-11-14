@@ -14,6 +14,12 @@ create table if not exists public.products (
 );
 
 -- 2. Security: anyone can read visible products; only logged-in admin can change anything
+-- Table-level access (newer Supabase projects don't grant this automatically).
+-- Row-level security below still decides which rows each role can actually touch.
+grant usage on schema public to anon, authenticated;
+grant select on public.products to anon;
+grant select, insert, update, delete on public.products to authenticated;
+
 alter table public.products enable row level security;
 
 drop policy if exists "Public can read visible products" on public.products;
@@ -61,6 +67,34 @@ drop policy if exists "Admin can delete product images" on storage.objects;
 create policy "Admin can delete product images"
   on storage.objects for delete
   using (bucket_id = 'product-images' and auth.role() = 'authenticated');
+
+-- 3b. Categories (the owner adds, renames and removes these in /admin)
+create table if not exists public.categories (
+  name text primary key,
+  sort integer not null default 0,
+  created_at timestamptz not null default now()
+);
+
+grant select on public.categories to anon;
+grant select, insert, update, delete on public.categories to authenticated;
+
+alter table public.categories enable row level security;
+
+drop policy if exists "Public can read categories" on public.categories;
+create policy "Public can read categories"
+  on public.categories for select using (true);
+
+drop policy if exists "Admin can manage categories" on public.categories;
+create policy "Admin can manage categories"
+  on public.categories for all
+  using (auth.role() = 'authenticated')
+  with check (auth.role() = 'authenticated');
+
+insert into public.categories (name, sort) values
+  ('Solar batteries', 1), ('Inverters', 2), ('Charge controllers', 3), ('Solar accessories', 4),
+  ('Fridges and freezers', 5), ('Televisions', 6), ('Sound systems', 7), ('Washing machines', 8),
+  ('Electrical materials', 9)
+on conflict (name) do nothing;
 
 -- 4. Starter products (dummy prices and stock photos; the owner can edit them in /admin)
 insert into public.products (name, category, price, image_url, sort)

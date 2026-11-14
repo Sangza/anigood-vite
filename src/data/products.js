@@ -9,8 +9,19 @@ export const CATEGORIES = [
 // Categories the owner can pick when adding a product (everything except "All products")
 export const PRODUCT_CATEGORIES = CATEGORIES.slice(1);
 
+// Built-in categories plus any new ones the owner created in /admin.
+export const categoriesFrom = (products) => {
+  const extra = [...new Set(products.map((p) => p.category).filter(Boolean))]
+    .filter((c) => !PRODUCT_CATEGORIES.includes(c))
+    .sort((a, b) => a.localeCompare(b));
+  return [...PRODUCT_CATEGORIES, ...extra];
+};
+
 const SOLAR = ["Solar batteries", "Inverters", "Charge controllers", "Solar accessories"];
-export const groupOf = (category) => (SOLAR.includes(category) ? "Solar" : "Electronics");
+// Built-in solar categories, plus any new/renamed category that sounds solar-related
+const SOLAR_WORDS = /solar|inverter|charge controller|batter|panel/i;
+export const groupOf = (category = "") =>
+  SOLAR.includes(category) || SOLAR_WORDS.test(category) ? "Solar" : "Electronics";
 
 // Fallback list, used only when Supabase is not configured or cannot be reached.
 export const FALLBACK_PRODUCTS = [

@@ -35,7 +35,7 @@ function Site() {
       <Header cartCount={cart.count} onOpenCart={() => setCartOpen(true)} onGroup={(g) => setFilter({ type: "group", value: g })} />
       <main id="top">
         <Hero />
-        <Categories filter={filter} onPick={pickCategory} />
+        <Categories products={products} filter={filter} onPick={pickCategory} />
         <Products products={products} loading={loading} filter={filter} onAdd={addToCart} />
         <Steps />
         <CallToAction />
