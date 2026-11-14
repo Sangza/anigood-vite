@@ -24,7 +24,7 @@ export default function Contact() {
               <dd><a href={waLink(DEFAULT_WA_TEXT)} target="_blank" rel="noopener noreferrer">{PHONE_DISPLAY}</a></dd>
             </div>
             <div><dt>Address</dt><dd>{ADDRESS}</dd></div>
-            <div><dt>Email</dt><dd className="muted">{EMAIL}</dd></div>
+            <div><dt>Email</dt><dd><a href={`mailto:${EMAIL}`} style={{ textDecoration: "underline" }}>{EMAIL}</a></dd></div>
           </dl>
           <a className="btn btn-wa" href={waLink(DEFAULT_WA_TEXT)} target="_blank" rel="noopener noreferrer">
             Chat on WhatsApp

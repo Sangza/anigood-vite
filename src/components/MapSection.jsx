@@ -2,7 +2,7 @@ import { ADDRESS, MAP_COORDS } from "../config.js";
 
 export default function MapSection() {
   const coords = MAP_COORDS.replace(/\s+/g, "");
-  const q = encodeURIComponent(coords || `${ADDRESS}, Nigeria`);
+  const q = encodeURIComponent(coords || (/nigeria/i.test(ADDRESS) ? ADDRESS : `${ADDRESS}, Nigeria`));
   return (
     <section className="section" id="map">
       <div className="container">
