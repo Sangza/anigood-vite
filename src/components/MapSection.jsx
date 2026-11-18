@@ -1,4 +1,4 @@
-import { ADDRESS, MAP_COORDS } from "../config.js";
+import { ADDRESS, MAP_COORDS, MAP_LINK } from "../config.js";
 
 export default function MapSection() {
   const coords = MAP_COORDS.replace(/\s+/g, "");
@@ -17,7 +17,7 @@ export default function MapSection() {
           />
         </div>
         <div className="center">
-          <a className="btn btn-dark" target="_blank" rel="noopener noreferrer" href={`https://www.google.com/maps/search/?api=1&query=${q}`}>
+          <a className="btn btn-dark" target="_blank" rel="noopener noreferrer" href={MAP_LINK || `https://www.google.com/maps/search/?api=1&query=${q}`}>
             Open in Google Maps
           </a>
         </div>
